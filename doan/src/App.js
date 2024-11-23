@@ -9,11 +9,13 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const App = () => {
   return (
     <div>
-      <Header />
+      
 
-      <Homepage />
-      {/* Other content of your app */}
+      <Header />  
+      <Homepage/> 
       <Footer />
+
+      
     </div>
   );
 };

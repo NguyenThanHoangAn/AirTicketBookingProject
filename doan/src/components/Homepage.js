@@ -3,8 +3,10 @@ import { Tab, Tabs, Container, Row, Col, Card, Form, Button, Carousel, Badge } f
 import background from '../images/halongbay.jpg';
 import flights from '../data/flightData';
 import promotions from '../data/promotionsData';
+import { Link  } from 'react-router-dom';
 
 const Homepage = () => {
+
     return (
         <main>
             <section className="position-relative">
@@ -159,7 +161,7 @@ const Homepage = () => {
                                         </Card.Text>
                                         <h5 className="text-danger font-weight-bold mb-4">{flight.price}</h5>
                                         <Button variant="outline-primary" className="mt-auto align-self-start small-font">
-                                            Xem chi tiết <i className="fas fa-arrow-right ms-2"></i>
+                                        <Link to="/passenger-details">Xem chi tiết </Link><i className="fas fa-arrow-right ms-2"></i>
                                         </Button>
                                     </Card.Body>
                                 </Card>
