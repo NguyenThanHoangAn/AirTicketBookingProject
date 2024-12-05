@@ -5,6 +5,8 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter , Routes, Route } from 'react-router-dom';
+import AdminFlightForm from './components/AdminFlightForm';
+import FlightManagement from './components/Flightmanagement';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,7 +14,8 @@ root.render(
     <BrowserRouter>
     <Routes>
     <Route path="/" element={<App />}/>
-    {/* <Route path="/passenger-details" element={<PassengerDetailsForm />}/> */}
+    <Route path="/adminflightform" element={<AdminFlightForm />}/>
+    <Route path="/flightmanagement" element={<FlightManagement />}/>
     </Routes>
     </BrowserRouter>
   </React.StrictMode>
