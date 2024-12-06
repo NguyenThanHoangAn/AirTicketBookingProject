@@ -1,0 +1,93 @@
+[
+    {
+      "id": 1,
+      "departure": "Hà Nội",
+      "destination": "Đà Nẵng",
+      "departureDate": "2024-12-05",
+      "returnDate": "2024-12-10",
+      "seatClass": "Economy",
+      "price": 1200000
+    },
+    {
+      "id": 2,
+      "departure": "Hồ Chí Minh",
+      "destination": "Cần Thơ",
+      "departureDate": "2024-12-06",
+      "returnDate": "2024-12-12",
+      "seatClass": "Business",
+      "price": 2500000
+    },
+    {
+      "id": 3,
+      "departure": "Hà Nội",
+      "destination": "Cần Thơ",
+      "departureDate": "2024-12-07",
+      "returnDate": "2024-12-15",
+      "seatClass": "Economy",
+      "price": 1500000
+    },
+    {
+      "id": 4,
+      "departure": "Hồ Chí Minh",
+      "destination": "Đà Nẵng",
+      "departureDate": "2024-12-08",
+      "returnDate": "2024-12-13",
+      "seatClass": "First Class",
+      "price": 3500000
+    },
+    {
+      "id": 5,
+      "departure": "Hà Nội",
+      "destination": "Hồ Chí Minh",
+      "departureDate": "2024-12-09",
+      "returnDate": "2024-12-14",
+      "seatClass": "Economy",
+      "price": 1800000
+    },
+    {
+      "id": 6,
+      "departure": "Đà Nẵng",
+      "destination": "Hồ Chí Minh",
+      "departureDate": "2024-12-11",
+      "returnDate": "2024-12-16",
+      "seatClass": "Business",
+      "price": 2700000
+    },
+    {
+      "id": 7,
+      "departure": "Cần Thơ",
+      "destination": "Hà Nội",
+      "departureDate": "2024-12-12",
+      "returnDate": "2024-12-18",
+      "seatClass": "Economy",
+      "price": 2100000
+    },
+    {
+      "id": 8,
+      "departure": "Đà Nẵng",
+      "destination": "Hà Nội",
+      "departureDate": "2024-12-13",
+      "returnDate": "2024-12-20",
+      "seatClass": "First Class",
+      "price": 3200000
+    },
+    {
+      "id": 9,
+      "departure": "Hồ Chí Minh",
+      "destination": "Hà Nội",
+      "departureDate": "2024-12-14",
+      "returnDate": "2024-12-21",
+      "seatClass": "Economy",
+      "price": 1900000
+    },
+    {
+      "id": 10,
+      "departure": "Cần Thơ",
+      "destination": "Đà Nẵng",
+      "departureDate": "2024-12-15",
+      "returnDate": "2024-12-22",
+      "seatClass": "Business",
+      "price": 3000000
+    }
+  ]
+  

@@ -1,0 +1,13 @@
+/* e:\AirTicketBookingProject\doan\src\components\SeatSelection.css */
+
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột cho mỗi hàng */
+    gap: 10px; /* Khoảng cách giữa các ghế */
+    margin-bottom: 20px;
+  }
+  
+  .seat {
+    width: 50px;
+    height: 50px;
+    background-color: #d3d3d3;}
