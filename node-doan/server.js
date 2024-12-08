@@ -1,29 +1,30 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
-console.log('EMAIL_USER:', process.env.EMAIL_USER);
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
-console.log('PORT:', process.env.PORT);
-console.log('MONGO_URI:', process.env.MONGO_URI);
 const Ticket = require('./models/Ticket');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const nodemailer = require('nodemailer');
-
+// Cấu hình Nodemailer
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Sử dụng SSL
     auth: {
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASS, 
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
     },
     tls: {
-        rejectUnauthorized: false, 
+        rejectUnauthorized: false, // Bỏ qua xác thực chứng chỉ
     },
+    debug: true, // Ghi chi tiết log gửi email
+    logger: true, // Ghi log quá trình gửi email
 });
 
+// Hàm gửi email
 const sendTicketEmail = (customerInfo) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -34,108 +35,49 @@ const sendTicketEmail = (customerInfo) => {
               `Chúc bạn có một chuyến đi vui vẻ!`,
     };
 
-    console.log('Mail Options:', mailOptions); 
+    console.log('Đang chuẩn bị gửi email với thông tin:', mailOptions);
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log('Lỗi khi gửi email: ' + error);
+            console.error('Lỗi khi gửi email:', error);
+            return; // Dừng lại nếu có lỗi
         }
-        console.log('Email đã được gửi: ' + info.response);
+        console.log('Email đã được gửi:', info.response);
     });
 };
 
-
 // Middleware
 app.use(cors());
-app.use(express.json()); // Để phân tích dữ liệu JSON
+app.use(express.json());
 
-// Kết nối đến MongoDB
+// Kết nối MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Kết nối MongoDB thành công!'))
     .catch(err => {
         console.error('Lỗi kết nối MongoDB:', err);
-        process.exit(1); // Thoát ứng dụng nếu kết nối thất bại
+        process.exit(1); // Thoát ứng dụng nếu không kết nối được
     });
 
-// API để lấy danh sách người dùng
+// API để lấy danh sách vé
 app.get('/tickets', async (req, res) => {
     try {
-        const users = await Ticket.find(); // Lấy tất cả người dùng
-        console.log(users); // Log dữ liệu để kiểm tra
-        if (users.length === 0) {
-            return res.status(404).json({ message: 'Không tìm thấy người dùng.' });
+        const tickets = await Ticket.find();
+        if (tickets.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy vé.' });
         }
-        res.json(users);
+        res.json(tickets);
     } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error); // Log lỗi
+        console.error('Lỗi khi lấy dữ liệu:', error);
         res.status(500).json({ message: error.message });
     }
 });
 
+// API để thêm vé
 app.post('/tickets', async (req, res) => {
-  const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia } = req.body;
-
-  // Kiểm tra dữ liệu đầu vào
-  if (!MaChuyenBay || !MaVe || !TenHanhKhach || !CMND_Passport || !SDT || !Gia) {
-      return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
-  }
-
-  try {
-      const newTicket = new Ticket({
-          MaChuyenBay,
-          MaVe,
-          TenHanhKhach,
-          CMND_Passport,
-          SDT,
-          Gia
-      });
-
-      const savedTicket = await newTicket.save(); // Lưu vé mới vào MongoDB
-      res.status(201).json(savedTicket); // Trả về vé mới đã lưu
-  } catch (error) {
-      console.error('Lỗi khi thêm vé:', error);
-      res.status(500).json({ message: error.message });
-  }
-});
-
-// API để cập nhật vé
-app.put('/tickets/:id', async (req, res) => {
-  try {
-      const ticketId = req.params.id;
-      const updatedTicket = await Ticket.findByIdAndUpdate(ticketId, req.body, { new: true });
-
-      if (!updatedTicket) {
-          return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
-      }
-
-      res.json(updatedTicket);
-  } catch (error) {
-      console.error('Lỗi khi cập nhật vé:', error);
-      res.status(500).json({ message: error.message });
-  }
-});
-
-app.delete('/tickets/:id', async (req, res) => {
-  try {
-      const ticketId = req.params.id;
-      const deletedTicket = await Ticket.findByIdAndDelete(ticketId);
-      
-      if (!deletedTicket) {
-          return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
-      }
-      
-      res.json({ message: 'Vé đã được xóa thành công.' });
-  } catch (error) {
-      console.error('Lỗi khi xóa vé:', error);
-      res.status(500).json({ message: error.message });
-  }
-});
-
-app.post('/tickets', async (req, res) => {
-    const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia, SDT } = req.body;
+    const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia, SDT, email } = req.body;
 
     // Kiểm tra dữ liệu đầu vào
-    if (!MaChuyenBay || !MaVe || !TenHanhKhach || !CMND_Passport || !SDT || !Gia) {
+    if (!MaChuyenBay || !MaVe || !TenHanhKhach || !CMND_Passport || !SDT || !Gia || !email) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
 
@@ -146,34 +88,61 @@ app.post('/tickets', async (req, res) => {
             TenHanhKhach,
             CMND_Passport,
             SDT,
-            Gia
+            Gia,
         });
 
-        const savedTicket = await newTicket.save(); // Lưu vé mới vào MongoDB
+        const savedTicket = await newTicket.save();
 
         const customerInfo = {
             ticketCode: savedTicket.MaVe,
-            email: req.body.email, // Email từ body của request
+            email: email,
         };
-        
-        if (!customerInfo.email || !customerInfo.ticketCode) {
-            console.error('Thiếu dữ liệu email hoặc mã vé!');
-            return res.status(400).json({ message: 'Thiếu dữ liệu email hoặc mã vé!' });
-        }
-        
+
+        // Gửi email xác nhận
         sendTicketEmail(customerInfo);
-        
-        res.status(201).json(savedTicket); // Trả về vé mới đã lưu
+
+        res.status(201).json(savedTicket);
     } catch (error) {
         console.error('Lỗi khi thêm vé:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi tạo vé. Vui lòng thử lại.' });
+    }
+});
+
+// API để cập nhật vé
+app.put('/tickets/:id', async (req, res) => {
+    try {
+        const ticketId = req.params.id;
+        const updatedTicket = await Ticket.findByIdAndUpdate(ticketId, req.body, { new: true });
+
+        if (!updatedTicket) {
+            return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
+        }
+
+        res.json(updatedTicket);
+    } catch (error) {
+        console.error('Lỗi khi cập nhật vé:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// API để xóa vé
+app.delete('/tickets/:id', async (req, res) => {
+    try {
+        const ticketId = req.params.id;
+        const deletedTicket = await Ticket.findByIdAndDelete(ticketId);
+
+        if (!deletedTicket) {
+            return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
+        }
+
+        res.json({ message: 'Vé đã được xóa thành công.' });
+    } catch (error) {
+        console.error('Lỗi khi xóa vé:', error);
         res.status(500).json({ message: error.message });
     }
 });
 
 // Khởi động server
 app.listen(PORT, () => {
-    console.log(`Server đang chạy trên http://localhost:${PORT}`);
-    console.log('EMAIL_USER:', process.env.EMAIL_USER);
-    console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
-    console.log('MONGO_URI:', process.env.MONGO_URI);
+    console.log(`Server đang chạy trên cổng ${PORT}`);
 });
