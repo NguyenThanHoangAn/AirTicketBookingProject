@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // Thêm import này
 import flightsData from '../data/flights.json';
 
 const FlightSearchForm = () => {
+    
     const [tripType, setTripType] = useState('one_way');
     const [departure, setDeparture] = useState('');
     const [destination, setDestination] = useState('');
@@ -32,7 +33,7 @@ const FlightSearchForm = () => {
     const handleSelectFlight = (flight) => {
         navigate('/booking', { state: { flight } }); // Chuyển hướng đến trang đặt vé
     };
-
+    
     return (
         <Card className="small-card shadow-sm" style={{ maxWidth: '80%', height: 'auto', margin: '0 auto' }}>
             <Card.Body>
@@ -152,6 +153,7 @@ const FlightSearchForm = () => {
             )}
         </Card>
     );
+    
 };
 
 export default FlightSearchForm;

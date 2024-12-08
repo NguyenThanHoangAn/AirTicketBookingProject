@@ -1,6 +1,8 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
+import Header from "./Header";
+import Footer from "./Footer";
 
 const BookingPage = () => {
   const location = useLocation();
@@ -13,6 +15,8 @@ const BookingPage = () => {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="container mt-5">
       <h1>Xác nhận đặt vé</h1>
       <Card className="mb-4">
@@ -22,6 +26,8 @@ const BookingPage = () => {
             <strong>Điểm đi:</strong> {flight.departure}<br />
             <strong>Điểm đến:</strong> {flight.destination}<br />
             <strong>Ngày đi:</strong> {flight.departureDate}<br />
+            <strong>Ngày về:</strong> {flight.returnDate}<br />
+            <strong>Loại ghế:</strong> {flight.seatClass}<br />
             <strong>Giá:</strong> {flight.price.toLocaleString()} VND
           </Card.Text>
         </Card.Body>
@@ -30,6 +36,9 @@ const BookingPage = () => {
       <Button variant="primary" onClick={handleConfirmBooking}>
         Xác nhận đặt vé
       </Button>
+      <p/>
+    </div>
+    <Footer/>
     </div>
   );
 };
