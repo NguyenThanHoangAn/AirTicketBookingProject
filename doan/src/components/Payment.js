@@ -1,4 +1,3 @@
-// src/components/Payment.js
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,7 +28,7 @@ const Payment = () => {
         return 'TK' + Math.random().toString(36).substr(2, 9).toUpperCase(); // Tạo mã vé ngẫu nhiên
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const ticketCode = generateTicketCode(); // Tạo mã vé
 
@@ -39,8 +38,34 @@ const Payment = () => {
             ticketCode, // Thêm mã vé vào thông tin
         };
 
-        // Chuyển hướng đến trang xác nhận
-        navigate('/confirmation', { state: { customerInfo: customerInfoWithTicketCode } });
+        // Gửi yêu cầu POST đến server để lưu vé
+        try {
+            const response = await fetch('http://localhost:5000/tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    MaChuyenBay: flight.flightNumber, // Thay đổi theo cấu trúc dữ liệu của bạn
+                    MaVe: ticketCode,
+                    TenHanhKhach: customerInfo.fullName,
+                    CMND_Passport: customerInfo.cccd, // Thay đổi theo cấu trúc dữ liệu của bạn
+                    Gia: flight.price,
+                    SDT: customerInfo.phoneNumber,
+                    email: customerInfo.email,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Lỗi khi lưu vé');
+            }
+
+            // Chuyển hướng đến trang xác nhận
+            navigate('/confirmation', { state: { customerInfo: customerInfoWithTicketCode } });
+        } catch (error) {
+            console.error('Lỗi khi gửi dữ liệu:', error);
+            alert('Đã xảy ra lỗi khi xác nhận thanh toán. Vui lòng thử lại.');
+        }
     };
 
     return (
@@ -52,7 +77,7 @@ const Payment = () => {
                     <p><strong>Điểm đi:</strong> {flight.departure}</p>
                     <p><strong>Điểm đến:</strong> {flight.destination}</p>
                     <p><strong>Ngày đi:</strong> {flight.departureDate}</p>
-                    <p><strong>Ngày về:</strong> {flight.returnDate}<br /></p>
+                    <p><strong>Ngày về:</strong> {flight.returnDate || 'Chưa xác định'}</p>
                     <p><strong>Giá:</strong> {flight.price.toLocaleString()} VND</p>
                     <h2>Thông tin khách hàng</h2>
                     <p><strong>Họ và tên:</strong> {customerInfo.fullName}</p>
@@ -65,43 +90,54 @@ const Payment = () => {
                     <h2>Thông tin thanh toán</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Loại thẻ</label>
-                            <input
-                                type="text"
-                                className="form-control"
+                            <label htmlFor="cardType">Loại thẻ:</label>
+                            <select
+                                id="cardType"
                                 value={cardType}
                                 onChange={(e) => setCardType(e.target.value)}
                                 required
-                            />
+                                className="form-control"
+                            >
+                                <option value="">Chọn loại thẻ</option>
+                                <option value="Visa">Visa</option>
+                                <option value="MasterCard">MasterCard</option>
+                                <option value="American Express">American Express</option>
+                            </select>
                         </div>
                         <div className="form-group">
-                            <label>Số thẻ</label>
+                            <label htmlFor="cardNumber">Số thẻ:</label>
                             <input
                                 type="text"
-                                className="form-control"
+                                id="cardNumber"
                                 value={cardNumber}
                                 onChange={(e) => setCardNumber(e.target.value)}
                                 required
+                                className="form-control"
                             />
                         </div>
                         <div className="form-group">
-                            <label>Tháng hết hạn</label>
+                            <label htmlFor="expiryMonth">Tháng hết hạn:</label>
                             <input
-                                type="text"
-                                className="form-control"
+                                type="number"
+                                id="expiryMonth"
                                 value={expiryMonth}
                                 onChange={(e) => setExpiryMonth(e.target.value)}
+                                min="1"
+                                max="12"
                                 required
+                                className="form-control"
                             />
                         </div>
                         <div className="form-group">
-                            <label>Năm hết hạn</label>
+                            <label htmlFor="expiryYear">Năm hết hạn:</label>
                             <input
-                                type="text"
-                                className="form-control"
+                                type="number"
+                                id="expiryYear"
                                 value={expiryYear}
                                 onChange={(e) => setExpiryYear(e.target.value)}
+                                min={new Date().getFullYear()}
                                 required
+                                className="form-control"
                             />
                         </div>
                         <button type="submit" className="btn btn-primary">Xác nhận thanh toán</button>
