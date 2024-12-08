@@ -4,6 +4,7 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 const Ticket = require('./models/Ticket');
+const Flightmg = require('./models/Flightmg');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -72,6 +73,20 @@ app.get('/tickets', async (req, res) => {
     }
 });
 
+app.get('/flightmgs', async (req, res) => {
+    try {
+        const users = await Flightmg.find(); // Lấy tất cả người dùng
+        console.log(users); // Log dữ liệu để kiểm tra
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy chuyến bay.' });
+        }
+        res.json(users);
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error); // Log lỗi
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // API để thêm vé
 app.post('/tickets', async (req, res) => {
     const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia, SDT, email } = req.body;
@@ -108,6 +123,32 @@ app.post('/tickets', async (req, res) => {
     }
 });
 
+app.post('/flightmgs', async (req, res) => {
+    const { MaChuyenBay, DiemDen, DiemDi, Ngay, Gia } = req.body;
+
+    // Kiểm tra dữ liệu đầu vào
+    if (!MaChuyenBay || !DiemDen || !DiemDi || !Ngay || !Gia) {
+        return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
+    }
+
+    try {
+        const newFlightmg = new Flightmg({
+            MaChuyenBay,
+            DiemDen,
+            DiemDi,
+            Ngay,
+            Gia,
+        });
+
+        const savedFlightmg = await newFlightmg.save(); // Lưu chuyến bay mới
+        res.status(201).json(savedFlightmg); // Trả về kết quả
+    } catch (error) {
+        console.error('Lỗi khi thêm chuyến bay:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 // API để cập nhật vé
 app.put('/tickets/:id', async (req, res) => {
     try {
@@ -118,28 +159,27 @@ app.put('/tickets/:id', async (req, res) => {
             return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
         }
 
-        res.json(updatedTicket);
-    } catch (error) {
-        console.error('Lỗi khi cập nhật vé:', error);
-        res.status(500).json({ message: error.message });
-    }
+      res.json(updatedTicket);
+  } catch (error) {
+      console.error('Lỗi khi cập nhật vé:', error);
+      res.status(500).json({ message: error.message });
+  }
 });
 
-// API để xóa vé
 app.delete('/tickets/:id', async (req, res) => {
-    try {
-        const ticketId = req.params.id;
-        const deletedTicket = await Ticket.findByIdAndDelete(ticketId);
-
-        if (!deletedTicket) {
-            return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
-        }
-
-        res.json({ message: 'Vé đã được xóa thành công.' });
-    } catch (error) {
-        console.error('Lỗi khi xóa vé:', error);
-        res.status(500).json({ message: error.message });
-    }
+  try {
+      const ticketId = req.params.id;
+      const deletedTicket = await Ticket.findByIdAndDelete(ticketId);
+      
+      if (!deletedTicket) {
+          return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
+      }
+      
+      res.json({ message: 'Vé đã được xóa thành công.' });
+  } catch (error) {
+      console.error('Lỗi khi xóa vé:', error);
+      res.status(500).json({ message: error.message });
+  }
 });
 
 // Khởi động server
