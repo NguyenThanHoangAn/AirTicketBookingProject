@@ -1,17 +1,18 @@
 import React from 'react';
 import './Header.css';
 import logo from '../images/logo.png';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light px-4">
-      <a className="navbar-brand" href="#">
+      <Link className="navbar-brand" to="/"> 
         <img
           src={logo}
           alt="AirTripper"
           style={{ width: '40px', maxHeight: '40px' }}
         />
-      </a>
+      </Link>
 
       {/* Burger menu toggle button */}
       <button
