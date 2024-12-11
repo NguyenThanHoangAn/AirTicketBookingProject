@@ -87,6 +87,48 @@ app.get('/flightmgs', async (req, res) => {
     }
 });
 
+
+app.get('/tickets/soghe/:MaChuyenBay', async (req, res) => {
+    try {
+        const flightCode = req.params.MaChuyenBay; // Lấy mã chuyến bay từ URL
+
+        // Truy vấn MongoDB để tìm vé theo mã chuyến bay
+        const tickets = await Ticket.find({ MaChuyenBay: flightCode });
+
+        // Kiểm tra nếu không tìm thấy vé
+        if (!tickets || tickets.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
+        }
+
+        // Lấy danh sách số ghế từ các vé
+        const seatNumbers = tickets.flatMap(ticket => ticket.selectedSeats);
+
+        // Trả về danh sách số ghế
+        res.json({ seats: seatNumbers });
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy dữ liệu.' });
+    }
+});
+
+// API to get ticket by ticket code (MaVe)
+app.get('/tickets/:MaVe', async (req, res) => {
+    try {
+        const flightCode = req.params.MaVe;
+        const ticket = await Ticket.findOne({ MaVe: flightCode }); // Use findOne to get a single ticket
+
+        if (!ticket) {
+            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
+        }
+
+        res.json(ticket); // Return the single ticket object
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 // API để thêm vé
 app.post('/tickets', async (req, res) => {
     const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia, SDT, email, selectedSeats } = req.body;
@@ -96,9 +138,6 @@ app.post('/tickets', async (req, res) => {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
 
-    // Chuyển đổi selectedSeats thành chuỗi nếu nó là mảng
-    const selectedSeatsString = Array.isArray(selectedSeats) ? selectedSeats.join('|') : selectedSeats;
-
     try {
         const newTicket = new Ticket({
             MaChuyenBay,
@@ -107,7 +146,7 @@ app.post('/tickets', async (req, res) => {
             CMND_Passport,
             SDT,
             Gia,
-            selectedSeats: selectedSeatsString // Lưu số ghế đã chọn dưới dạng chuỗi
+            selectedSeats // Lưu số ghế đã chọn trực tiếp dưới dạng mảng
         });
 
         const savedTicket = await newTicket.save();
@@ -200,22 +239,8 @@ app.delete('/flightmgs/:id', async (req, res) => {
     }
 });
 
-// API để lấy danh sách vé theo mã chuyến bay
-app.get('/tickets/:MaChuyenBay', async (req, res) => {
-    try {
-        const flightCode = req.params.MaChuyenBay;
-        const tickets = await Ticket.find({ MaChuyenBay: flightCode });
 
-        if (tickets.length === 0) {
-            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
-        }
 
-        res.json(tickets);
-    } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
 
 // Khởi động server
 app.listen(PORT, () => {

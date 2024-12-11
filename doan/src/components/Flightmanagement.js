@@ -216,8 +216,8 @@ const FlightManagement = () => {
                 flightmg.map((flight) => (
                   <tr key={flight._id}>
                     <td>{flight.MaChuyenBay}</td>
-                    <td>{flight.DiemDen}</td>
                     <td>{flight.DiemDi}</td>
+                    <td>{flight.DiemDen}</td>
                     <td>{new Date(flight.Ngay).toLocaleDateString()}</td>
                     <td>{flight.Gia} VND</td>
                     <td>
