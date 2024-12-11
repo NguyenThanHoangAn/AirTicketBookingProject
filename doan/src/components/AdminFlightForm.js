@@ -10,6 +10,7 @@ const AdminFlightForm = () => {
     passportNumber: "",
     sdt: "",
     price: "",
+    selectedSeats: "", // Add selectedSeats to formData
   });
 
   const [ticketList, setTicketList] = useState([]);
@@ -56,6 +57,7 @@ const AdminFlightForm = () => {
       passportNumber: "",
       sdt: "",
       price: "",
+      selectedSeats: "", // Reset selectedSeats
     });
     setEditingTicketId(null);
     setIsEditing(false);
@@ -67,7 +69,8 @@ const AdminFlightForm = () => {
       !formData.passengerName ||
       !formData.passportNumber ||
       !formData.price ||
-      !formData.sdt
+      !formData.sdt ||
+      !formData.selectedSeats // Ensure selectedSeats is filled
     ) {
       alert("Vui lòng điền đầy đủ thông tin!");
       return;
@@ -90,6 +93,7 @@ const AdminFlightForm = () => {
             CMND_Passport: formData.passportNumber,
             SDT: formData.sdt,
             Gia: formData.price,
+            selectedSeats: formData.selectedSeats, // Include selectedSeats in the request
           }),
         }
       );
@@ -124,6 +128,7 @@ const AdminFlightForm = () => {
       passportNumber: ticket.passportNumber,
       sdt: ticket.sdt,
       price: ticket.price,
+      selectedSeats: ticket.selectedSeats, // Set selectedSeats ```javascript
     });
     setEditingTicketId(ticket._id);
     setIsEditing(true);
@@ -183,6 +188,7 @@ const AdminFlightForm = () => {
                   name="flightNumber"
                   value={formData.flightNumber}
                   onChange={handleChange}
+                  disabled // Disable editing for flight number
                 />
               </div>
               <div className="form-group">
@@ -193,6 +199,7 @@ const AdminFlightForm = () => {
                   name="ticketNumber"
                   value={formData.ticketNumber}
                   onChange={handleChange}
+                  disabled // Disable editing for ticket number
                 />
               </div>
               <div className="form-group">
@@ -232,6 +239,16 @@ const AdminFlightForm = () => {
                   className="form-control"
                   name="price"
                   value={formData.price}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Số Ghế</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="selectedSeats"
+                  value={formData.selectedSeats}
                   onChange={handleChange}
                 />
               </div>

@@ -206,20 +206,34 @@ app.post('/flightmgs', async (req, res) => {
 
 
 // API để cập nhật vé
+// API để cập nhật vé
 app.put('/tickets/:id', async (req, res) => {
     try {
         const ticketId = req.params.id;
+        const { MaChuyenBay, selectedSeats } = req.body;
+
+        // Kiểm tra xem vé có cùng mã chuyến bay và số ghế đã tồn tại không
+        const existingTicket = await Ticket.findOne({ 
+            _id: { $ne: ticketId }, // Không kiểm tra vé hiện tại
+            MaChuyenBay,
+            selectedSeats 
+        });
+
+        if (existingTicket) {
+            return res.status(400).json({ message: 'Vé với mã chuyến bay và số ghế này đã tồn tại!' });
+        }
+
         const updatedTicket = await Ticket.findByIdAndUpdate(ticketId, req.body, { new: true });
 
         if (!updatedTicket) {
             return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
         }
 
-      res.json(updatedTicket);
-  } catch (error) {
-      console.error('Lỗi khi cập nhật vé:', error);
-      res.status(500).json({ message: error.message });
-  }
+        res.json(updatedTicket);
+    } catch (error) {
+        console.error('Lỗi khi cập nhật vé:', error);
+        res.status(500).json({ message: error.message });
+    }
 });
 
 app.put('/flightmgs/:id', async (req, res) => {
