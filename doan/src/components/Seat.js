@@ -54,8 +54,12 @@ const SeatSelection = () => {
     };
 
     const handleConfirmSeats = () => {
-        tickets = { selectedSeats: selectedSeats.join('|') };
-        navigate('/payment', { state: { selectedSeats, customerInfo, flight, tickets } });
+        if (selectedSeats.length > 0) {
+            // Chuyển hướng đến trang thanh toán với thông tin ghế đã chọn
+            navigate('/payment', { state: { customerInfo: location.state.customerInfo, flight, tickets: { selectedSeats } } });
+        } else {
+            alert('Vui lòng chọn ít nhất một ghế.');
+        }
     };
 
     return (
