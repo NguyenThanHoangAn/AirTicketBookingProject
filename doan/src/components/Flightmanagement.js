@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const FlightManagement = () => {
-  const [flightmg, setFlights] = useState([]); // State to store flight list
+  const [flightmg, setFlights] = useState([]);
   const [formData, setFormData] = useState({
     flightNumber: "",
     destination: "",
@@ -11,8 +11,8 @@ const FlightManagement = () => {
     date: "",
     price: "",
   });
-  const [isEditing, setIsEditing] = useState(false); // State to track editing mode
-  const [editingFlightId, setEditingFlightId] = useState(null); // State for flight being edited
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingFlightId, setEditingFlightId] = useState(null);
 
   useEffect(() => {
     fetchFlights();
@@ -31,63 +31,92 @@ const FlightManagement = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const generateFlightNumber = () => {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const randomLetters = Array(3)
+      .fill()
+      .map(() => letters.charAt(Math.floor(Math.random() * letters.length)))
+      .join("");
+    const randomNumbers = Math.floor(100 + Math.random() * 900); // Random 3 digits
+    return randomLetters + randomNumbers;
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);  // Kiểm tra giá trị thay đổi
+    setFormData({ ...formData, [name]: value });
+  };
+  
+  
+
   const handleAddOrEditFlight = async () => {
-    if (!formData.flightNumber || !formData.destination || !formData.origin || !formData.date || !formData.price) {
+    if (!formData.destination || !formData.origin || !formData.date || !formData.price || !formData.selectedSeats) {
       alert("Please fill out all fields!");
       return;
     }
 
-    try {
-      const endpoint = isEditing
-        ? `http://localhost:5000/flightmgs/${editingFlightId}`
-        : "http://localhost:5000/flightmgs";
-      const method = isEditing ? "PUT" : "POST";
+  try {
+    const endpoint = isEditing
+      ? `http://localhost:5000/flightmgs/${editingFlightId}`
+      : "http://localhost:5000/flightmgs";
+    const method = isEditing ? "PUT" : "POST";
 
-      const response = await fetch(endpoint, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          MaChuyenBay: formData.flightNumber,
-          DiemDen: formData.destination,
-          DiemDi: formData.origin,
-          Ngay: formData.date,
-          Gia: formData.price,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to add/edit flight");
-      }
-
-      await fetchFlights(); // Refresh list
-      setFormData({ flightNumber: "", destination: "", origin: "", date: "", price: "" }); // Reset form
-      setIsEditing(false); // Exit editing mode
-      setEditingFlightId(null); // Clear editing ID
-      alert(isEditing ? "Flight updated successfully!" : "Flight added successfully!");
-    } catch (error) {
-      console.error("Error adding/editing flight:", error);
-      alert("An error occurred. Please try again!");
-    }
-  };
-
-  const handleEditFlight = (flight) => {
-    setFormData({
-      flightNumber: flight.MaChuyenBay,
-      destination: flight.DiemDen,
-      origin: flight.DiemDi,
-      date: flight.Ngay.slice(0, 10), // Format date for input
-      price: flight.Gia,
+    const response = await fetch(endpoint, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        MaChuyenBay: generateFlightNumber(),
+        DiemDen: formData.destination,
+        DiemDi: formData.origin,
+        Ngay: formData.date,
+        LoaiGhe: formData.selectedSeats,  // Đảm bảo gửi đúng LoaiGhe
+        Gia: formData.price,
+      }),
     });
-    setEditingFlightId(flight._id); // Set ID of flight being edited
-    setIsEditing(true); // Enable editing mode
-  };
+
+    if (!response.ok) {
+      throw new Error("Failed to add/edit flight");
+    }
+
+    await fetchFlights();
+
+    setFormData({
+      flightNumber: "", // Reset flight number after saving
+      destination: "",
+      origin: "",
+      date: "",
+      selectedSeats: "", // Reset selected seats
+      price: "",
+    });
+
+    setIsEditing(false);
+    setEditingFlightId(null);
+
+    alert(isEditing ? "Flight updated successfully!" : "Flight added successfully!");
+  } catch (error) {
+    console.error("Error adding/editing flight:", error);
+    alert("An error occurred: " + error.message);
+  }
+};
+
+
+const handleEditFlight = (flight) => {
+  const date = flight.Ngay ? flight.Ngay.slice(0, 10) : "";
+
+  setFormData({
+    flightNumber: flight.MaChuyenBay,
+    destination: flight.DiemDen,
+    origin: flight.DiemDi,
+    date: date,
+    selectedSeats: flight.LoaiGhe,  // Đảm bảo giá trị LoaiGhe được truyền vào selectedSeats
+    price: flight.Gia,
+  });
+  setEditingFlightId(flight._id);
+  setIsEditing(true);
+};
+
 
   const handleDeleteFlight = async (id) => {
     if (!window.confirm("Are you sure you want to delete this flight?")) {
@@ -103,7 +132,7 @@ const FlightManagement = () => {
         throw new Error("Failed to delete flight");
       }
 
-      await fetchFlights(); // Refresh list
+      await fetchFlights();
       alert("Flight deleted successfully!");
     } catch (error) {
       console.error("Error deleting flight:", error);
@@ -130,30 +159,9 @@ const FlightManagement = () => {
         <div className="col-md-9">
           <h2>Quản lý chuyến bay</h2>
           <form className="mb-4">
-            <div className="form-group">
-              <label>Mã chuyến bay</label>
-              <input
-                type="text"
-                className="form-control"
-                name="flightNumber"
-                value={formData.flightNumber}
-                onChange={handleChange}
-                placeholder="Enter flight number"
-              />
-            </div>
+            
             <div className="form-group">
               <label>Điểm đi</label>
-              <input
-                type="text"
-                className="form-control"
-                name="destination"
-                value={formData.destination}
-                onChange={handleChange}
-                placeholder="Enter destination"
-              />
-            </div>
-            <div className="form-group">
-              <label>Điểm đến</label>
               <input
                 type="text"
                 className="form-control"
@@ -161,6 +169,17 @@ const FlightManagement = () => {
                 value={formData.origin}
                 onChange={handleChange}
                 placeholder="Enter origin"
+              />
+            </div>
+            <div className="form-group">
+              <label>Điểm đến</label>
+              <input
+                type="text"
+                className="form-control"
+                name="destination"
+                value={formData.destination}
+                onChange={handleChange}
+                placeholder="Enter destination"
               />
             </div>
             <div className="form-group">
@@ -172,6 +191,20 @@ const FlightManagement = () => {
                 value={formData.date}
                 onChange={handleChange}
               />
+            </div>
+            <div className="form-group">
+              <label>Loại ghế</label>
+              <select
+                className="form-control"
+                name="selectedSeats"
+                value={formData.selectedSeats}
+                onChange={handleChange}
+              >
+                <option value="">Chọn loại ghế</option>
+                <option value="Kinh tế">Kinh tế</option>
+                <option value="Thương gia">Thương gia</option>
+                <option value="Hạng nhất">Hạng nhất</option>
+              </select>
             </div>
             <div className="form-group">
               <label>Giá</label>
@@ -201,6 +234,7 @@ const FlightManagement = () => {
                 <th>Điểm đi</th>
                 <th>Điểm đến</th>
                 <th>Ngày</th>
+                <th>Loại ghế</th>
                 <th>Giá</th>
                 <th>Actions</th>
               </tr>
@@ -208,9 +242,7 @@ const FlightManagement = () => {
             <tbody>
               {flightmg.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center">
-                    Không có chuyến bay nào.
-                  </td>
+                  <td colSpan="6" className="text-center">Không có chuyến bay nào.</td>
                 </tr>
               ) : (
                 flightmg.map((flight) => (
@@ -219,20 +251,11 @@ const FlightManagement = () => {
                     <td>{flight.DiemDi}</td>
                     <td>{flight.DiemDen}</td>
                     <td>{new Date(flight.Ngay).toLocaleDateString()}</td>
+                    <td>{flight.LoaiGhe}</td>
                     <td>{flight.Gia} VND</td>
                     <td>
-                      <button
-                        className="btn btn-warning btn-sm"
-                        onClick={() => handleEditFlight(flight)}
-                      >
-                        Sửa
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteFlight(flight._id)}
-                      >
-                        Xóa
-                      </button>
+                      <button className="btn btn-warning btn-sm" onClick={() => handleEditFlight(flight)}>Sửa</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDeleteFlight(flight._id)}>Xóa</button>
                     </td>
                   </tr>
                 ))
@@ -244,5 +267,6 @@ const FlightManagement = () => {
     </div>
   );
 };
+
 
 export default FlightManagement;

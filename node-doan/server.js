@@ -162,30 +162,47 @@ app.post('/tickets', async (req, res) => {
 });
 
 app.post('/flightmgs', async (req, res) => {
-    const { MaChuyenBay, DiemDen, DiemDi, Ngay, Gia, LoaiGhe } = req.body;
+    const { DiemDen, DiemDi, Ngay, Gia, LoaiGhe, MaChuyenBay } = req.body;
 
-    // Kiểm tra dữ liệu đầu vào
-    if (!MaChuyenBay || !DiemDen || !DiemDi || !Ngay || !Gia || !LoaiGhe) {
+    console.log("Received data:", req.body);
+
+    // Kiểm tra dữ liệu có đầy đủ không
+    if (!DiemDen || !DiemDi || !Ngay || !LoaiGhe || !Gia) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
 
+    // Kiểm tra xem Ngay có phải là một ngày hợp lệ không
+    if (isNaN(new Date(Ngay).getTime())) {
+        return res.status(400).json({ message: 'Ngày không hợp lệ!' });
+    }
+
+    // Tạo mã chuyến bay nếu không có trong yêu cầu
+    const flightCode = MaChuyenBay || generateFlightCode(); // Giả sử generateFlightCode() là một hàm sinh mã chuyến bay duy nhất
+
     try {
-        const newFlightmg = new Flightmg({
-            MaChuyenBay,
+        // Tạo đối tượng chuyến bay mới
+        const newFlight = new Flightmg({
+            MaChuyenBay: flightCode,
             DiemDen,
             DiemDi,
             Ngay,
             LoaiGhe,
-            Gia,
+            Gia
         });
 
-        const savedFlightmg = await newFlightmg.save(); // Lưu chuyến bay mới
-        res.status(201).json(savedFlightmg); // Trả về kết quả
+        // Lưu chuyến bay vào cơ sở dữ liệu
+        const savedFlight = await newFlight.save();
+
+        // Trả về kết quả thành công
+        res.status(201).json(savedFlight);
     } catch (error) {
+        // Log lỗi và trả về thông báo lỗi cho người dùng
         console.error('Lỗi khi thêm chuyến bay:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Không thể thêm chuyến bay. Vui lòng thử lại sau.' });
     }
 });
+
+
 
 
 // API để cập nhật vé
@@ -203,6 +220,31 @@ app.put('/tickets/:id', async (req, res) => {
       console.error('Lỗi khi cập nhật vé:', error);
       res.status(500).json({ message: error.message });
   }
+});
+
+app.put('/flightmgs/:id', async (req, res) => {
+    const { DiemDen, DiemDi, Ngay, Gia, LoaiGhe } = req.body;  // Thêm LoaiGhe vào đây
+
+    if (!DiemDen || !DiemDi || !Ngay || !Gia || !LoaiGhe) {  // Kiểm tra trường LoaiGhe
+        return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
+    }
+
+    try {
+        const updatedFlight = await Flightmg.findByIdAndUpdate(
+            req.params.id,
+            { DiemDen, DiemDi, Ngay, Gia, LoaiGhe },  // Cập nhật thêm LoaiGhe
+            { new: true }
+        );
+
+        if (!updatedFlight) {
+            return res.status(404).json({ message: 'Không tìm thấy chuyến bay.' });
+        }
+
+        res.json(updatedFlight);
+    } catch (error) {
+        console.error('Lỗi khi cập nhật chuyến bay:', error);
+        res.status(500).json({ message: 'Không thể cập nhật chuyến bay. Vui lòng thử lại.' });
+    }
 });
 
 
