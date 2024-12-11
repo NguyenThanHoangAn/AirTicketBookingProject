@@ -46,14 +46,6 @@ const Header = () => {
                         </Link>
                     </li>
                 </ul>
-                <div className="ms-auto mt-2">
-                    <Link to="/login" className="btn btn-primary btn-sm me-2">
-                        Đăng nhập
-                    </Link>
-                    <Link to="/register" className="btn btn-success btn-sm">
-                        Đăng ký
-                    </Link>
-                </div>
             </div>
         </nav>
     );
