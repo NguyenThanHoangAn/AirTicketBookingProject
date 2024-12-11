@@ -166,21 +166,6 @@ app.put('/tickets/:id', async (req, res) => {
   }
 });
 
-app.put('/flightmgs/:id', async (req, res) => {
-    try {
-      const flightId = req.params.id;
-      const updatedFlight = await Flightmg.findByIdAndUpdate(flightId, req.body, { new: true });
-  
-      if (!updatedFlight) {
-        return res.status(404).json({ message: 'Không tìm thấy chuyến bay với ID này.' });
-      }
-  
-      res.json(updatedFlight);
-    } catch (error) {
-      console.error('Lỗi khi cập nhật chuyến bay:', error);
-      res.status(500).json({ message: error.message });
-    }
-  });
 
 app.delete('/tickets/:id', async (req, res) => {
   try {
@@ -197,22 +182,6 @@ app.delete('/tickets/:id', async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 });
-
-app.delete('/flightmgs/:id', async (req, res) => {
-    try {
-        const FlightmgId = req.params.id;
-        const deletedFlightmg = await Flightmg.findByIdAndDelete(FlightmgId);
-        
-        if (!deletedFlightmg) {
-            return res.status(404).json({ message: 'Không tìm thấy vé với ID này.' });
-        }
-        
-        res.json({ message: 'Vé đã được xóa thành công.' });
-    } catch (error) {
-        console.error('Lỗi khi xóa vé:', error);
-        res.status(500).json({ message: error.message });
-    }
-  });
 
 // Khởi động server
 app.listen(PORT, () => {
