@@ -3,19 +3,33 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ListGroup, Button, Card } from 'react-bootstrap';
 import Header from './Header';
 import Footer from './Footer';
+import flightsData from '../data/flights.json'
 
 const SearchFlightResult = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    
+    // Kiểm tra xem location.state có tồn tại không, nếu không thì gán giá trị mặc định
+    const { filteredFlights = [] } = location.state || {}; // Gán giá trị mặc định là mảng rỗng
 
-    // Retrieve the filtered flights from location.state
-    const { filteredFlights = [] } = location.state || {};
-    const [searchResults, setSearchResults] = useState(filteredFlights); // State to store search results
+    const [departure, setDeparture] = useState('');
+    const [destination, setDestination] = useState('');
+    const [departureDate, setDepartureDate] = useState('');
+    const [seatClass, setSeatClass] = useState('');
+    const [searchResults, setSearchResults] = useState(filteredFlights); // State để lưu kết quả tìm kiếm
 
-    useEffect(() => {
-        // Initialize search results with filtered flights
-        setSearchResults(filteredFlights);
-    }, [filteredFlights]);
+    const handleSearch = () => {
+        // Logic tìm kiếm chuyến bay
+        const results = filteredFlights.filter(flight => {
+            const matchesDeparture = flight.DiemDi.toLowerCase().includes(departure.toLowerCase()) || !departure;
+            const matchesDestination = flight.DiemDen.toLowerCase().includes(destination.toLowerCase()) || !destination;
+            const matchesDepartureDate = flight.Ngay === departureDate || !departureDate;
+            const matchesSeatClass = flight.LoaiGhe.toLowerCase() === seatClass.toLowerCase() || !seatClass;
+            return matchesDeparture && matchesDestination && matchesDepartureDate && matchesSeatClass;
+        });
+
+        setSearchResults(results); // Cập nhật kết quả tìm kiếm
+    };
 
     const handleSelectFlight = (flight) => {
         // Navigate to the booking page with the selected flight
