@@ -99,9 +99,9 @@ const FlightSearchForm = () => {
                             onChange={(e) => setSeatClass(e.target.value)} 
                         >
                             <option value="">Chọn loại ghế</option>
-                            <option value="economy">Kinh tế</option>
-                            <option value="business">Thương gia</option>
-                            <option value="first">Hạng nhất</option>
+                            <option value="economy">Economy</option>
+                            <option value="business">Business</option>
+                            <option value="first">First Class</option>
                         </Form.Control>
                     </Form.Group>
 

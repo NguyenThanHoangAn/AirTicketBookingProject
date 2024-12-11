@@ -160,10 +160,8 @@ const AdminFlightForm = () => {
             <button className="list-group-item list-group-item-action bg-secondary text-white">
               Chức năng
             </button>
-            <Link to={"/flightmanagement"}>
-              <button className="list-group-item list-group-item-action">
+            <Link to={"/flightmanagement"} className="list-group-item list-group-item-action">
                 Quản lý chuyến bay
-              </button>
             </Link>
             <Link
               to="/adminflightform"
