@@ -59,8 +59,8 @@ const SeatSelection = () => {
     };
 
     const handleConfirmSeats = () => {
-        tickets = { selectedSeats: selectedSeats.join('|') };
-        navigate('/payment', { state: { selectedSeats, customerInfo, flight, tickets } });
+        const updatedTickets = { selectedSeats: selectedSeats.join('|') }; // Sử dụng biến mới
+        navigate('/payment', { state: { selectedSeats, customerInfo, flight, tickets: updatedTickets } });
     };
 
     return (

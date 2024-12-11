@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ListGroup, Button, Form, Card } from 'react-bootstrap';
 import Header from './Header';
 import Footer from './Footer';
+import flightsData from '../data/flights.json'
 
 const SearchFlightResult = () => {
     const location = useLocation();
@@ -20,11 +21,12 @@ const SearchFlightResult = () => {
 
     const handleSearch = () => {
         // Logic tìm kiếm chuyến bay
-        const results = filteredFlights.filter(flight => {
+        let results = flightsData.filter(flight => {
             const matchesDeparture = flight.DiemDi.toLowerCase().includes(departure.toLowerCase()) || !departure;
             const matchesDestination = flight.DiemDen.toLowerCase().includes(destination.toLowerCase()) || !destination;
             const matchesDepartureDate = flight.Ngay === departureDate || !departureDate;
             const matchesSeatClass = flight.LoaiGhe.toLowerCase() === seatClass.toLowerCase() || !seatClass;
+
             return matchesDeparture && matchesDestination && matchesDepartureDate && matchesSeatClass;
         });
 

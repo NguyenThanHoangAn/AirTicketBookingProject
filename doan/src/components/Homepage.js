@@ -11,6 +11,7 @@ const Homepage = () => {
     return (
         <main>
             <Banner /> {/* Thêm Banner ở đây */}
+            <BookingSection/>
             <Container className="py-5">
                 {/* Promotions Section */}
                 <section className="mb-5">
