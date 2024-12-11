@@ -201,9 +201,9 @@ const handleEditFlight = (flight) => {
                 onChange={handleChange}
               >
                 <option value="">Chọn loại ghế</option>
-                <option value="Kinh tế">Kinh tế</option>
-                <option value="Thương gia">Thương gia</option>
-                <option value="Hạng nhất">Hạng nhất</option>
+                <option value="Kinh tế">Economy</option>
+                <option value="Thương gia">Business</option>
+                <option value="Hạng nhất">First Class</option>
               </select>
             </div>
             <div className="form-group">
