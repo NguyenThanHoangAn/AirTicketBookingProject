@@ -12,6 +12,9 @@ import CustomerInfoPage from './components/CustomerInfoPage';
 import Confirmation from './components/Confirmation';
 import Payment from './components/Payment';
 import Seat from './components/Seat';
+import FlightInfo from './components/FligthInfo';
+import SearchFlightResult from './components/SearchFlightResult';
+import Support from './components/Support';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,12 +24,15 @@ root.render(
     <Routes>
     <Route path="/" element={<App />}/>
     <Route path="/booking" element={<BookingPage />} />
+    <Route path="/search-flight-result" element={<SearchFlightResult />} />
     <Route path="/customer-info" element={<CustomerInfoPage />} />
     <Route path='/seat' element={<Seat />} />
     <Route path='/payment' element={<Payment /> }/>
     <Route path="/confirmation" element={<Confirmation />} />
     <Route path="/adminflightform" element={<AdminFlightForm />}/>
     <Route path="/flightmanagement" element={<FlightManagement />}/>
+    <Route path="/flight-info" element={<FlightInfo />} />
+    <Route path="/support" element={<Support />} />
     </Routes>
     </BrowserRouter>
   </React.StrictMode>

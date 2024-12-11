@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Form, Button, ListGroup, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Thêm import này
-import flightsData from '../data/flights.json';
+import flightsData from '../data/flights.json'; // Sử dụng flights.json
 
 const FlightSearchForm = () => {
     
@@ -16,22 +16,21 @@ const FlightSearchForm = () => {
 
     const handleSearch = () => {
         let results = flightsData.filter(flight => {
-            const matchesDeparture = flight.departure.toLowerCase().includes(departure.toLowerCase()) || !departure;
-            const matchesDestination = flight.destination.toLowerCase().includes(destination.toLowerCase()) || !destination;
-            const matchesDepartureDate = flight.departureDate === departureDate || !departureDate;
-            const matchesReturnDate = tripType === 'round_trip'
-                ? (flight.returnDate === returnDate || !returnDate)
-                : true;
-            const matchesSeatClass = flight.seatClass === seatClass || !seatClass;
+            const matchesDeparture = flight.DiemDi.toLowerCase().includes(departure.toLowerCase()) || !departure;
+            const matchesDestination = flight.DiemDen.toLowerCase().includes(destination.toLowerCase()) || !destination;
+            const matchesDepartureDate = flight.Ngay === departureDate || !departureDate;
+            const matchesSeatClass = flight.LoaiGhe.toLowerCase() === seatClass.toLowerCase() || !seatClass;
 
-            return matchesDeparture && matchesDestination && matchesDepartureDate && matchesReturnDate && matchesSeatClass;
+            return matchesDeparture && matchesDestination && matchesDepartureDate && matchesSeatClass;
         });
 
-        setFilteredFlights(results);
+        // Chuyển hướng đến trang kết quả tìm kiếm
+        navigate('/search-flight-result', { state: { filteredFlights: results } });
     };
 
     const handleSelectFlight = (flight) => {
-        navigate('/booking', { state: { flight } }); // Chuyển hướng đến trang đặt vé
+        // Chuyển hướng đến trang đặt vé hoặc trang khác nếu cần
+        navigate('/booking', { state: { flight } });
     };
     
     return (
@@ -65,7 +64,7 @@ const FlightSearchForm = () => {
                     {/* Phần nhập điểm đi và điểm đến */}
                     <Row className="mb-1">
                         <Col md={6} className="mb-1">
-                            <Form .Group controlId="formDeparture">
+                            <Form.Group controlId="formDeparture">
                                 <Form.Label>Điểm đi</Form.Label>
                                 <Form.Control 
                                     type="text" 
@@ -115,7 +114,7 @@ const FlightSearchForm = () => {
                     </Row>
 
                     {/* Phần chọn loại ghế */}
-                    <Form.Group controlId="formSeatClass" className="mb-1">
+                    <Form.Group className="mb-1">
                         <Form.Label>Loại ghế</Form.Label>
                         <Form.Control 
                             as="select" 
@@ -123,37 +122,40 @@ const FlightSearchForm = () => {
                             onChange={(e) => setSeatClass(e.target.value)} 
                         >
                             <option value="">Chọn loại ghế</option>
-                            <option value="economy">Economy</option>
-                            <option value="business">Business</option>
+                            <option value="economy">Kinh tế</option>
+                            <option value="business">Thương gia</option>
+                            <option value="first">Hạng nhất</option>
                         </Form.Control>
                     </Form.Group>
 
                     {/* Nút tìm kiếm */}
                     <Button variant="primary" onClick={handleSearch}>
-                        Tìm vé
+                        Tìm kiếm
                     </Button>
                 </Form>
-            </Card.Body>
 
-            {/* Hiển thị kết quả tìm kiếm */}
-            {filteredFlights.length > 0 && (
-                <ListGroup className="mt-3">
-                    {filteredFlights.map((flight) => (
-                        <ListGroup.Item key={flight.id} className="d-flex justify-content-between align-items-center">
-                            <div>
-                                <strong>{flight.departure} → {flight.destination}</strong><br />
-                                Ngày: {flight.departureDate} | Giá: {flight.price.toLocaleString()} VND
+                {/* Hiển thị kết quả tìm kiếm */}
+                {filteredFlights.length > 0 && (
+                    <ListGroup className="mt-3">
+                    {filteredFlights.map((flight, index) => (
+                        <ListGroup.Item key={index}>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{flight.DiemDi} - {flight.DiemDen}</strong>
+                                    <p>{flight.Ngay} | {flight.LoaiGhe}</p>
+                                    <p><strong>Mã chuyến bay:</strong> {flight.MaChuyenBay}</p>
+                                </div>
+                                <Button variant="primary" onClick={() => handleSelectFlight(flight)}>
+                                    Chọn vé
+                                </Button>
                             </div>
-                            <Button variant="success" onClick={() => handleSelectFlight(flight)}>
-                                Chọn vé
-                            </Button>
                         </ListGroup.Item>
                     ))}
                 </ListGroup>
-            )}
+                )}
+            </Card.Body>
         </Card>
     );
-    
 };
 
 export default FlightSearchForm;

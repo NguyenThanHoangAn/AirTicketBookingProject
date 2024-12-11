@@ -1,24 +1,16 @@
+// src/components/Homepage.js
 import React from 'react';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import background from '../images/halongbay.jpg';
+import Banner from './Banner'; // Import component Banner
 import flights from '../data/flightData';
 import promotions from '../data/promotionsData';
 import BookingSection from './SearchTicket';
 
 const Homepage = () => {
-
     return (
         <main>
-            <section className="position-relative">
-                <img 
-                    src={background} 
-                    alt="Halong Bay" 
-                    className="img-fluid w-100" 
-                />
-                <BookingSection/>
-            </section>
-
+            <Banner /> {/* Thêm Banner ở đây */}
             <Container className="py-5">
                 {/* Promotions Section */}
                 <section className="mb-5">
@@ -26,18 +18,18 @@ const Homepage = () => {
                         <h2 className="h4 font-weight-bold">Ưu đãi</h2>
                     </div>
                     <Row>
-                    {promotions.map((promo) => (
-                        <Col key={promo.id} md={4} sm={6} className="mb-4">
-                            <Card className="h-100 shadow-sm">
-                                <Card.Img variant="top" src={promo.image} alt={promo.title} />
-                                <Card.Body className="d-flex flex-column text-center">
-                                    <Card.Title>{promo.title}</Card.Title>
-                                    <Card.Text>{promo.description}</Card.Text>
-                                    <Button variant={promo.buttonVariant}>{promo.buttonText}</Button>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
+                        {promotions.map((promo) => (
+                            <Col key={promo.id} md={4} sm={6} className="mb-4">
+                                <Card className="h-100 shadow-sm">
+                                    <Card.Img variant="top" src={promo.image} alt={promo.title} />
+                                    <Card.Body className="d-flex flex-column text-center">
+                                        <Card.Title>{promo.title}</Card.Title>
+                                        <Card.Text>{promo.description}</Card.Text>
+                                        <Button variant={promo.buttonVariant}>{promo.buttonText}</Button>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
                     </Row>
                 </section>
 
@@ -76,15 +68,10 @@ const Homepage = () => {
                             </Col>
                         ))}
                     </Row>
-                    <div className="text-center">
-                        <Link to="/flights">
-                            <Button variant="success">Xem thêm</Button>
-                        </Link>
-                    </div>
                 </section>
             </Container>
         </main>
     );
-}
+};
 
 export default Homepage;

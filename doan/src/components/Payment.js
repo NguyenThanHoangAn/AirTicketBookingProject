@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Header from './Header';
+import Footer from './Footer';
 
 const Payment = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const { customerInfo } = location.state || {}; // Nhận thông tin khách hàng từ state
-
     // State để lưu thông tin thẻ
     const [cardType, setCardType] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [expiryMonth, setExpiryMonth] = useState('');
     const [expiryYear, setExpiryYear] = useState('');
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { customerInfo, tickets } = location.state || {}; // Nhận thông tin khách hàng từ state
 
-    // Kiểm tra xem customerInfo có tồn tại không
-    if (!customerInfo) {
-        return <div>Không tìm thấy thông tin khách hàng.</div>;
+    // Kiểm tra xem tickets có tồn tại không
+    if (!tickets) {
+        return <div>Không tìm thấy thông tin vé.</div>; // Thông báo nếu không có thông tin vé
     }
 
     const flight = customerInfo.flight; // Lấy thông tin chuyến bay từ customerInfo
@@ -46,13 +47,14 @@ const Payment = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    MaChuyenBay: flight.flightNumber, // Thay đổi theo cấu trúc dữ liệu của bạn
+                    MaChuyenBay: flight.MaChuyenBay,
                     MaVe: ticketCode,
                     TenHanhKhach: customerInfo.fullName,
-                    CMND_Passport: customerInfo.cccd, // Thay đổi theo cấu trúc dữ liệu của bạn
-                    Gia: flight.price,
+                    CMND_Passport: customerInfo.cccd,
+                    Gia: flight.Gia,
                     SDT: customerInfo.phoneNumber,
                     email: customerInfo.email,
+                    selectedSeats: tickets.selectedSeats // Thêm số ghế đã chọn
                 }),
             });
 
@@ -61,24 +63,26 @@ const Payment = () => {
             }
 
             // Chuyển hướng đến trang xác nhận
-            navigate('/confirmation', { state: { customerInfo: customerInfoWithTicketCode } });
+            navigate('/confirmation', { state: { tickets: { selectedSeats: [] }, customerInfo: customerInfoWithTicketCode } });
         } catch (error) {
             console.error('Lỗi khi gửi dữ liệu:', error);
             alert('Đã xảy ra lỗi khi xác nhận thanh toán. Vui lòng thử lại.');
         }
     };
-
+    
     return (
+        <div>
+            <Header/>
         <div className="container mt-5">
             <h1>Thanh Toán</h1>
             <div className="row">
                 <div className="col-md-6">
                     <h2>Thông tin chuyến bay</h2>
-                    <p><strong>Điểm đi:</strong> {flight.departure}</p>
-                    <p><strong>Điểm đến:</strong> {flight.destination}</p>
-                    <p><strong>Ngày đi:</strong> {flight.departureDate}</p>
-                    <p><strong>Ngày về:</strong> {flight.returnDate || 'Chưa xác định'}</p>
-                    <p><strong>Giá:</strong> {flight.price.toLocaleString()} VND</p>
+                    <p><strong>Điểm đi:</strong> {flight.DiemDi}</p>
+                    <p><strong>Điểm đến:</strong> {flight.DiemDen}</p>
+                    <p><strong>Ngày đi:</strong> {flight.Ngay}</p>
+                    <p><strong>Giá:</strong> {flight.Gia.toLocaleString()} VND</p>
+                    <p><strong>Số ghế: </strong>{tickets.selectedSeats}</p>
                     <h2>Thông tin khách hàng</h2>
                     <p><strong>Họ và tên:</strong> {customerInfo.fullName}</p>
                     <p><strong>Email:</strong> {customerInfo.email}</p>
@@ -144,6 +148,8 @@ const Payment = () => {
                     </form>
                 </div>
             </div>
+        </div>
+        <Footer/>
         </div>
     );
 };

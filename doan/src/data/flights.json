@@ -1,103 +1,103 @@
 [
     {
       "id": 1,
-      "flightNumber": "AA123",
-      "departure": "Hà Nội",
-      "destination": "Đà Nẵng",
-      "departureDate": "2024-12-05",
-      "returnDate": "2024-12-10",
-      "seatClass": "Economy",
-      "price": 1200000
+      "MaChuyenBay": "AA123",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-05",
+      "LoaiGhe": "Economy",
+      "Gia": 1200000,
+      "bookedSeat": ""
     },
     {
       "id": 2,
-      "flightNumber": "VN359",
-      "departure": "Hồ Chí Minh",
-      "destination": "Cần Thơ",
-      "departureDate": "2024-12-06",
-      "returnDate": "2024-12-12",
-      "seatClass": "Business",
-      "price": 2500000
+      "MaChuyenBay": "VN359",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Cần Thơ",
+      "Ngay": "2024-12-06",
+      "LoaiGhe": "Business",
+      "Gia": 2500000,
+      "bookedSeat": ""
     },
     {
       "id": 3,
-      "flightNumber": "VJ929",
-      "departure": "Hà Nội",
-      "destination": "Cần Thơ",
-      "departureDate": "2024-12-07",
-      "returnDate": "2024-12-15",
-      "seatClass": "Economy",
-      "price": 1500000
+      "MaChuyenBay": "VJ929",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Cần Thơ",
+      "Ngay": "2024-12-07",
+      "LoaiGhe": "Economy",
+      "Gia": 1500000,
+      "bookedSeat": ""
     },
     {
       "id": 4,
-      "flightNumber": "AA301",
-      "departure": "Hồ Chí Minh",
-      "destination": "Đà Nẵng",
-      "departureDate": "2024-12-08",
-      "returnDate": "2024-12-13",
-      "seatClass": "First Class",
-      "price": 3500000
+      "MaChuyenBay": "AA301",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-08",
+      "LoaiGhe": "First Class",
+      "Gia": 3500000,
+      "bookedSeat": ""
     },
     {
       "id": 5,
-      "flightNumber": "VN141",
-      "departure": "Hà Nội",
-      "destination": "Hồ Chí Minh",
-      "departureDate": "2024-12-09",
-      "returnDate": "2024-12-14",
-      "seatClass": "Economy",
-      "price": 1800000
+      "MaChuyenBay": "VN141",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Hồ Chí Minh",
+      "Ngay": "2024-12-09",
+      "LoaiGhe": "Economy",
+      "Gia": 1800000,
+      "bookedSeat": ""
     },
     {
       "id": 6,
-      "flightNumber": "VJ298",
-      "departure": "Đà Nẵng",
-      "destination": "Hồ Chí Minh",
-      "departureDate": "2024-12-11",
-      "returnDate": "2024-12-16",
-      "seatClass": "Business",
-      "price": 2700000
+      "MaChuyenBay": "VJ298",
+      "DiemDi": "Đà Nẵng",
+      "DiemDen": "Hồ Chí Minh",
+      "Ngay": "2024-12-11",
+      "LoaiGhe": "Business",
+      "Gia": 2700000,
+      "bookedSeat": ""
     },
     {
       "id": 7,
-      "flightNumber": "VN531",
-      "departure": "Cần Thơ",
-      "destination": "Hà Nội",
-      "departureDate": "2024-12-12",
-      "returnDate": "2024-12-18",
-      "seatClass": "Economy",
-      "price": 2100000
+      "MaChuyenBay": "VN531",
+      "DiemDi": "Cần Thơ",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-12",
+      "LoaiGhe": "Economy",
+      "Gia": 2100000,
+      "bookedSeat": ""
     },
     {
       "id": 8,
-      "flightNumber": "AA231",
-      "departure": "Đà Nẵng",
-      "destination": "Hà Nội",
-      "departureDate": "2024-12-13",
-      "returnDate": "2024-12-20",
-      "seatClass": "First Class",
-      "price": 3200000
+      "MaChuyenBay": "AA231",
+      "DiemDi": "Đà Nẵng",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-13",
+      "LoaiGhe": "First Class",
+      "Gia": 3200000,
+      "bookedSeat": ""
     },
     {
       "id": 9,
-      "flightNumber": "VN085",
-      "departure": "Hồ Chí Minh",
-      "destination": "Hà Nội",
-      "departureDate": "2024-12-14",
-      "returnDate": "2024-12-21",
-      "seatClass": "Economy",
-      "price": 1900000
+      "MaChuyenBay": "VN085",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-14",
+      "LoaiGhe": "Economy",
+      "Gia": 1900000,
+      "bookedSeat": ""
     },
     {
       "id": 10,
-      "flightNumber": "VJ229",
-      "departure": "Cần Thơ",
-      "destination": "Đà Nẵng",
-      "departureDate": "2024-12-15",
-      "returnDate": "2024-12-22",
-      "seatClass": "Business",
-      "price": 3000000
+      "MaChuyenBay": "VJ229",
+      "DiemDi": "Cần Thơ",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-15",
+      "LoaiGhe": "Business",
+      "Gia": 3000000,
+      "bookedSeat": ""
     }
   ]
   
