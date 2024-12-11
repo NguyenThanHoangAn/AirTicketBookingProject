@@ -1,4 +1,3 @@
-// src/components/Homepage.js
 import React from 'react';
 import { Container, Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -52,7 +51,7 @@ const Homepage = () => {
                                         <Card.Title className="small-font">{flight.route}</Card.Title>
                                         <Card.Text className="text-muted small mb-2">
                                             Ngày: {flight.date}
-                                        </Card.Text>
+</Card.Text>
                                         <Card.Text className="text-muted small mb-3">
                                             Giá từ: VNĐ
                                         </Card.Text>

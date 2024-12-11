@@ -87,6 +87,48 @@ app.get('/flightmgs', async (req, res) => {
     }
 });
 
+
+app.get('/tickets/soghe/:MaChuyenBay', async (req, res) => {
+    try {
+        const flightCode = req.params.MaChuyenBay; // Lấy mã chuyến bay từ URL
+
+        // Truy vấn MongoDB để tìm vé theo mã chuyến bay
+        const tickets = await Ticket.find({ MaChuyenBay: flightCode });
+
+        // Kiểm tra nếu không tìm thấy vé
+        if (!tickets || tickets.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
+        }
+
+        // Lấy danh sách số ghế từ các vé
+        const seatNumbers = tickets.flatMap(ticket => ticket.selectedSeats);
+
+        // Trả về danh sách số ghế
+        res.json({ seats: seatNumbers });
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi khi lấy dữ liệu.' });
+    }
+});
+
+// API to get ticket by ticket code (MaVe)
+app.get('/tickets/:MaVe', async (req, res) => {
+    try {
+        const flightCode = req.params.MaVe;
+        const ticket = await Ticket.findOne({ MaVe: flightCode }); // Use findOne to get a single ticket
+
+        if (!ticket) {
+            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
+        }
+
+        res.json(ticket); // Return the single ticket object
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
 // API để thêm vé
 app.post('/tickets', async (req, res) => {
     const { MaChuyenBay, MaVe, TenHanhKhach, CMND_Passport, Gia, SDT, email, selectedSeats } = req.body;
@@ -96,9 +138,6 @@ app.post('/tickets', async (req, res) => {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
 
-    // Chuyển đổi selectedSeats thành chuỗi nếu nó là mảng
-    const selectedSeatsString = Array.isArray(selectedSeats) ? selectedSeats.join('|') : selectedSeats;
-
     try {
         const newTicket = new Ticket({
             MaChuyenBay,
@@ -107,7 +146,7 @@ app.post('/tickets', async (req, res) => {
             CMND_Passport,
             SDT,
             Gia,
-            selectedSeats: selectedSeatsString // Lưu số ghế đã chọn dưới dạng chuỗi
+            selectedSeats // Lưu số ghế đã chọn trực tiếp dưới dạng mảng
         });
 
         const savedTicket = await newTicket.save();
@@ -123,30 +162,47 @@ app.post('/tickets', async (req, res) => {
 });
 
 app.post('/flightmgs', async (req, res) => {
-    const { MaChuyenBay, DiemDen, DiemDi, Ngay, Gia, LoaiGhe } = req.body;
+    const { DiemDen, DiemDi, Ngay, Gia, LoaiGhe, MaChuyenBay } = req.body;
 
-    // Kiểm tra dữ liệu đầu vào
-    if (!MaChuyenBay || !DiemDen || !DiemDi || !Ngay || !Gia || !LoaiGhe) {
+    console.log("Received data:", req.body);
+
+    // Kiểm tra dữ liệu có đầy đủ không
+    if (!DiemDen || !DiemDi || !Ngay || !LoaiGhe || !Gia) {
         return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
     }
 
+    // Kiểm tra xem Ngay có phải là một ngày hợp lệ không
+    if (isNaN(new Date(Ngay).getTime())) {
+        return res.status(400).json({ message: 'Ngày không hợp lệ!' });
+    }
+
+    // Tạo mã chuyến bay nếu không có trong yêu cầu
+    const flightCode = MaChuyenBay || generateFlightCode(); // Giả sử generateFlightCode() là một hàm sinh mã chuyến bay duy nhất
+
     try {
-        const newFlightmg = new Flightmg({
-            MaChuyenBay,
+        // Tạo đối tượng chuyến bay mới
+        const newFlight = new Flightmg({
+            MaChuyenBay: flightCode,
             DiemDen,
             DiemDi,
             Ngay,
             LoaiGhe,
-            Gia,
+            Gia
         });
 
-        const savedFlightmg = await newFlightmg.save(); // Lưu chuyến bay mới
-        res.status(201).json(savedFlightmg); // Trả về kết quả
+        // Lưu chuyến bay vào cơ sở dữ liệu
+        const savedFlight = await newFlight.save();
+
+        // Trả về kết quả thành công
+        res.status(201).json(savedFlight);
     } catch (error) {
+        // Log lỗi và trả về thông báo lỗi cho người dùng
         console.error('Lỗi khi thêm chuyến bay:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Không thể thêm chuyến bay. Vui lòng thử lại sau.' });
     }
 });
+
+
 
 
 // API để cập nhật vé
@@ -165,6 +221,32 @@ app.put('/tickets/:id', async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 });
+
+app.put('/flightmgs/:id', async (req, res) => {
+    const { DiemDen, DiemDi, Ngay, Gia, LoaiGhe } = req.body;  // Thêm LoaiGhe vào đây
+
+    if (!DiemDen || !DiemDi || !Ngay || !Gia || !LoaiGhe) {  // Kiểm tra trường LoaiGhe
+        return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin!' });
+    }
+
+    try {
+        const updatedFlight = await Flightmg.findByIdAndUpdate(
+            req.params.id,
+            { DiemDen, DiemDi, Ngay, Gia, LoaiGhe },  // Cập nhật thêm LoaiGhe
+            { new: true }
+        );
+
+        if (!updatedFlight) {
+            return res.status(404).json({ message: 'Không tìm thấy chuyến bay.' });
+        }
+
+        res.json(updatedFlight);
+    } catch (error) {
+        console.error('Lỗi khi cập nhật chuyến bay:', error);
+        res.status(500).json({ message: 'Không thể cập nhật chuyến bay. Vui lòng thử lại.' });
+    }
+});
+
 
 app.delete('/tickets/:id', async (req, res) => {
   try {
@@ -215,22 +297,8 @@ app.get('/tickets/:ticketCode', async (req, res) => {
     }
 });
 
-// API để lấy danh sách vé theo mã chuyến bay
-app.get('/tickets/:MaChuyenBay', async (req, res) => {
-    try {
-        const flightCode = req.params.MaChuyenBay;
-        const tickets = await Ticket.find({ MaChuyenBay: flightCode });
 
-        if (tickets.length === 0) {
-            return res.status(404).json({ message: 'Không tìm thấy vé cho chuyến bay này.' });
-        }
 
-        res.json(tickets);
-    } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error);
-        res.status(500).json({ message: error.message });
-    }
-});
 
 // Khởi động server
 app.listen(PORT, () => {

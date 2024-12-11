@@ -1,72 +1,67 @@
 import React, { useState } from 'react';
-import { Button, Form, Card } from 'react-bootstrap';
-import Header from './Header'; // Import Header
-import Footer from './Footer'; // Import Footer
+import { Card, Button, Form } from 'react-bootstrap';
+import Header from './Header';
+import Footer from './Footer';
+import './FlightInfo.css';
 
 const FlightInfo = () => {
     const [ticketCode, setTicketCode] = useState('');
     const [flightInfo, setFlightInfo] = useState(null);
     const [error, setError] = useState('');
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        setError('');
-        setFlightInfo(null);
+    const handleSearch = async () => {
+        setError(''); // Reset error message
+        setFlightInfo(null); // Reset flight info
 
         try {
             const response = await fetch(`http://localhost:5000/tickets/${ticketCode}`);
             if (!response.ok) {
-                throw new Error('Không tìm thấy thông tin chuyến bay với mã vé này.');
+                throw new Error('Không tìm thấy vé với mã này.');
             }
             const data = await response.json();
-            setFlightInfo(data);
+            setFlightInfo(data); // Set the flight info directly from the response
         } catch (err) {
-            setError(err.message);
+            setError(err.message); // Set error message
         }
     };
-
     return (
-        <div>
-            <Header />
-            <div className="container mt-5">
-                <h1>Tìm thông tin chuyến bay</h1>
-                <Form onSubmit={handleSearch}>
-                    <Form.Group controlId="ticketCode">
-                        <Form.Label>Mã vé</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập mã vé"
-                            value={ticketCode}
-                            onChange={(e) => setTicketCode(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Tìm kiếm
-                    </Button>
-                </Form>
+        <div className="d-flex flex-column min-vh-100">
+            <Header/>
+        <div className="container mt-4">
+            <h2>Tra cứu thông tin chuyến bay</h2>
+            <Form inline className="mb-3">
+                <Form.Control
+                    type="text"
+                    placeholder="Nhập mã vé"
+                    value={ticketCode}
+                    onChange={(e) => setTicketCode(e.target.value)}
+                />
+                <Button variant="primary" onClick={handleSearch}>
+                    Tìm kiếm
+                </Button>
+            </Form>
 
-                {error && <div className="alert alert-danger mt-3">{error}</div>}
+            {error && <div className="alert alert-danger">{error}</div>}
 
-                {flightInfo && (
-                    <Card className="mt-4">
-                        <Card.Body>
-                            <Card.Title>Thông tin chuyến bay</Card.Title>
-                            <Card.Text>
-                                <strong>Mã vé:</strong> {flightInfo.MaVe}<br />
-                                <strong>Tên hành khách:</strong> {flightInfo.TenHanhKhach}<br />
-                                <strong>Mã chuyến bay:</strong> {flightInfo.MaChuyenBay}<br />
-                                <strong>Giá:</strong> {flightInfo.Gia} VND<br />
-                                <strong>Số điện thoại:</strong> {flightInfo.SDT}<br />
-                                <strong>Số ghế:</strong> {flightInfo.selectedSeats}<br />
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                )}
-            </div>
-            <Footer />
+            {flightInfo && (
+                <Card className="mt-4">
+                    <Card.Body>
+                        <Card.Title>Thông tin chuyến bay</Card.Title>
+                        <Card.Text>
+                            <strong>Mã vé:</strong> {flightInfo.MaVe}<br />
+                            <strong>Tên hành khách:</strong> {flightInfo.TenHanhKhach}<br />
+                            <strong>Mã chuyến bay:</strong> {flightInfo.MaChuyenBay}<br />
+                            <strong>Giá:</strong> {flightInfo.Gia} VND<br />
+                            <strong>Số điện thoại:</strong> {flightInfo.SDT}<br />
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            )}
+        </div>
+        <Footer/>
         </div>
     );
+    
 };
 
 export default FlightInfo;

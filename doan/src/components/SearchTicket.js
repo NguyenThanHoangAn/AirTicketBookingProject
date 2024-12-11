@@ -38,29 +38,6 @@ const FlightSearchForm = () => {
             <Card.Body>
                 <Card.Title className="h5 font-weight-bold mb-1">Nhập thông tin địa điểm, ngày</Card.Title>
                 <Form>
-                    {/* Phần Loại chuyến */}
-                    <Form.Group as={Row} className="mb-1">
-                        <Form.Label as="legend" column sm={3}>Loại chuyến</Form.Label>
-                        <Col sm={9}>
-                            <Form.Check
-                                type="radio"
-                                label="Một chiều"
-                                name="trip_type"
-                                id="one_way"
-                                defaultChecked
-                                onChange={() => setTripType('one_way')}
-                                className="me-2"
-                            />
-                            <Form.Check
-                                type="radio"
-                                label="Khứ hồi"
-                                name="trip_type"
-                                id="round_trip"
-                                onChange={() => setTripType('round_trip')}
-                            />
-                        </Col>
-                    </Form.Group>
-
                     {/* Phần nhập điểm đi và điểm đến */}
                     <Row className="mb-1">
                         <Col md={6} className="mb-1">

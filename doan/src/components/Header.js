@@ -31,7 +31,7 @@ const Header = () => {
             <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul className="navbar-nav me-auto">
                     <li className="nav-item">
-                        <Link className="nav-link" to="/search-flight-result"> 
+                        <Link className="nav-link" to="/"> 
                             Đặt vé
                         </Link>
                     </li>
