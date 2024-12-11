@@ -1,0 +1,43 @@
+.seat-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.seat {
+    width: 40px; /* Chiều rộng của ghế */
+    height: 40px; /* Chiều cao của ghế */
+    background-color: #f0f0f0; /* Màu nền ghế */
+    border: 2px solid #ccc; /* Đường viền ghế */
+    border-radius: 10px; /* Bo góc */
+    display: flex;
+    justify-content: center; /* Căn giữa chữ trong ghế */
+    align-items: center; /* Căn giữa chữ trong ghế */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Thêm hiệu ứng chuyển động */
+    margin: 5px; /* Khoảng cách giữa các ghế */
+}
+
+.seat.booked {
+    background-color: red; /* Tô đỏ cho ghế đã đặt */
+    color: white; /* Màu chữ cho ghế đã đặt */
+    cursor: not-allowed; /* Hiển thị con trỏ không cho phép */
+}
+
+.seat.selected {
+    background-color: #28a745; }
+
+.seat:hover {
+    background-color: #d1d1d1; /* Màu nền khi di chuột qua ghế */
+    transform: scale(1.05); /* Tăng kích thước khi di chuột qua */
+}
+
+.aisle {
+    margin-left: 50px; /* Tạo khoảng cách lớn hơn cho hành lang */
+}
+.seat-gap {
+    margin-right: 20px; /* Điều chỉnh khoảng cách theo ý muốn */
+}
+
+

@@ -1,0 +1,103 @@
+[
+    {
+      "id": 1,
+      "MaChuyenBay": "AA123",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-05",
+      "LoaiGhe": "Economy",
+      "Gia": 1200000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 2,
+      "MaChuyenBay": "VN359",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Cần Thơ",
+      "Ngay": "2024-12-06",
+      "LoaiGhe": "Business",
+      "Gia": 2500000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 3,
+      "MaChuyenBay": "VJ929",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Cần Thơ",
+      "Ngay": "2024-12-07",
+      "LoaiGhe": "Economy",
+      "Gia": 1500000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 4,
+      "MaChuyenBay": "AA301",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-08",
+      "LoaiGhe": "First Class",
+      "Gia": 3500000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 5,
+      "MaChuyenBay": "VN141",
+      "DiemDi": "Hà Nội",
+      "DiemDen": "Hồ Chí Minh",
+      "Ngay": "2024-12-09",
+      "LoaiGhe": "Economy",
+      "Gia": 1800000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 6,
+      "MaChuyenBay": "VJ298",
+      "DiemDi": "Đà Nẵng",
+      "DiemDen": "Hồ Chí Minh",
+      "Ngay": "2024-12-11",
+      "LoaiGhe": "Business",
+      "Gia": 2700000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 7,
+      "MaChuyenBay": "VN531",
+      "DiemDi": "Cần Thơ",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-12",
+      "LoaiGhe": "Economy",
+      "Gia": 2100000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 8,
+      "MaChuyenBay": "AA231",
+      "DiemDi": "Đà Nẵng",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-13",
+      "LoaiGhe": "First Class",
+      "Gia": 3200000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 9,
+      "MaChuyenBay": "VN085",
+      "DiemDi": "Hồ Chí Minh",
+      "DiemDen": "Hà Nội",
+      "Ngay": "2024-12-14",
+      "LoaiGhe": "Economy",
+      "Gia": 1900000,
+      "bookedSeat": ""
+    },
+    {
+      "id": 10,
+      "MaChuyenBay": "VJ229",
+      "DiemDi": "Cần Thơ",
+      "DiemDen": "Đà Nẵng",
+      "Ngay": "2024-12-15",
+      "LoaiGhe": "Business",
+      "Gia": 3000000,
+      "bookedSeat": ""
+    }
+  ]
+  

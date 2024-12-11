@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+/* src/App.css */
+html, body {
+  height: 100%; /* Đảm bảo chiều cao 100% cho body */
+  margin: 0; /* Xóa margin mặc định */
+}
+
+.d-flex {
+  display: flex; /* Sử dụng Flexbox */
+}
+
+.flex-column {
+  flex-direction: column; /* Sắp xếp theo chiều dọc */
+}
+
+.flex-grow-1 {
+  flex-grow: 1; /* Cho phép nội dung chiếm không gian còn lại */
+}
+
+.min-vh-100 {
+  min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là 100% chiều cao viewport */
+}

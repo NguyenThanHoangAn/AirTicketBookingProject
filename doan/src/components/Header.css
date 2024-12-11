@@ -1,52 +1,30 @@
-.burger-menu-icon {
-    display: inline-block;
-    position: relative;
-    width: 24px;
-    height: 18px;
-    margin: 0 10px;
-  }
-  
-  .bar {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #333;
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-  
-  .bar:nth-child(1) {
-    transform: translateY(-6px);
-  }
-  
-  .bar:nth-child(2) {
-    transform: translateY(2px);
-  }
-  
-  .bar:nth-child(3) {
-    transform: translateY(6px);
-  }
-  
-  .navbar-toggler:focus .burger-menu-icon .bar {
-    background-color: #666;
-  }
-  
-  .navbar-toggler:hover .burger-menu-icon .bar {
-    background-color: #999;
-  }
-  
-  .navbar-toggler[aria-expanded="true"] .burger-menu-icon .bar {
-    background-color: #666;
-  }
-  
-  .navbar-toggler[aria-expanded="true"] .burger-menu-icon .bar:nth-child(1) {
-    transform: translateY(0px) rotate(45deg);
-  }
-  
-  .navbar-toggler[aria-expanded="true"] .burger-menu-icon .bar:nth-child(2) {
-    opacity: 0;
-  }
-  
-  .navbar-toggler[aria-expanded="true"] .burger-menu-icon .bar:nth-child(3) {
-    transform: translateY(0px) rotate(-45deg);
-  }
+.navbar {
+  background-color: #f8f9fa; /* Màu nền sáng */
+  border-bottom: 1px solid #dee2e6; /* Đường viền dưới */
+}
+
+.navbar-brand {
+  font-size: 1.5rem; /* Kích thước chữ lớn hơn */
+  color: #007bff; /* Màu chữ */
+}
+
+.nav-link {
+  color: #495057; /* Màu chữ cho các liên kết */
+  transition: color 0.3s; /* Hiệu ứng chuyển màu */
+}
+
+.nav-link:hover {
+  color: #007bff; /* Màu chữ khi hover */
+}
+
+.btn {
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu cho nút */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
+
+.btn-success:hover {
+  background-color: #28a745; /* Màu nền khi hover */
+}

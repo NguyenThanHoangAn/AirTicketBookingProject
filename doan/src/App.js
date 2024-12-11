@@ -1,23 +1,24 @@
+// src/App.js
 import React from 'react';
-import Header from '../src/components/Header';
-import Footer from '../src/components/Footer';
-import Homepage from '../src/components/Homepage';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Homepage from './components/Homepage';
+import Support from './components/Support'; // Import trang hỗ trợ
+import './App.css'; // Import file CSS cho App
 
 const App = () => {
-  return (
-    <div>
-      
-
-      <Header />  
-      <Homepage/> 
-      <Footer />
-
-      
-    </div>
-  );
+    return (
+        <div className="d-flex flex-column min-vh-100"> {/* Sử dụng Flexbox để đảm bảo Footer ở cuối */}
+            <Header />
+            <div className="flex-grow-1"> {/* Nội dung sẽ chiếm không gian còn lại */}
+                <Routes>
+                    <Route path="/" element={<Homepage />} />
+                </Routes>
+            </div>
+            <Footer />
+        </div>
+    );
 };
 
 export default App;
