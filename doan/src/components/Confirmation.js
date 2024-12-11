@@ -1,12 +1,18 @@
 // src/components/Confirmation.js
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import Header from './Header'; 
 import Footer from './Footer'; 
+import { Button } from 'react-bootstrap';
 
 const Confirmation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { customerInfo } = location.state;
+
+  const handleGoHome = () => {
+    navigate('/'); // Điều hướng về trang chủ
+  };
 
   return (
     <div>
@@ -16,11 +22,10 @@ const Confirmation = () => {
           <h1 className="text-center">Xác nhận đặt vé thành công!</h1>
           <h2>Thông tin chuyến bay</h2>
           <p><strong>Mã vé:</strong> {customerInfo.ticketCode}</p>
-          <p><strong>Điểm đi:</strong> {customerInfo.flight.departure}</p>
-          <p><strong>Điểm đến:</strong> {customerInfo.flight.destination}</p>
-          <p><strong>Ngày đi:</strong> {customerInfo.flight.departureDate}</p>
-          <p><strong>Ngày về:</strong> {customerInfo.flight.returnDate}<br /></p>
-          <p><strong>Giá:</strong> {customerInfo.flight.price.toLocaleString()} VND</p>
+          <p><strong>Điểm đi:</strong> {customerInfo.flight.DiemDi}</p>
+          <p><strong>Điểm đến:</strong> {customerInfo.flight.DiemDen}</p>
+          <p><strong>Ngày đi:</strong> {customerInfo.flight.Ngay}</p>
+          <p><strong>Giá:</strong> {customerInfo.flight.Gia.toLocaleString()} VND</p>
 
           <h2>Thông tin khách hàng</h2>
           <p><strong>Họ và tên:</strong> {customerInfo.fullName}</p>
@@ -30,6 +35,10 @@ const Confirmation = () => {
           <p><strong>Địa chỉ:</strong> {customerInfo.address}</p>
         </div>
       </div>
+      <br/>
+      <Button variant='primary' onClick={handleGoHome} >
+        Quay về trang chủ
+      </Button>
       <br/>
       <Footer />
     </div>

@@ -31,17 +31,15 @@ const CustomerInfoPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-
     const customerInfo = {
-      ...formData,
-      fullName: `${formData.lastName} ${formData.fullName}`, // Họ + tên
-      flight,
+        ...formData,
+        fullName: `${formData.lastName} ${formData.fullName}`, // Họ + tên
+        flight,
     };
 
-    // Điều hướng đến trang thanh toán
-    navigate('/seat', { state: { customerInfo } });
-  };
-
+    // Điều hướng đến trang chọn ghế
+    navigate('/seat', { state: { customerInfo, flight } }); // Truyền cả customerInfo và flight
+};
   return (
     <div>
       <Header />
@@ -138,11 +136,11 @@ const CustomerInfoPage = () => {
                 <Card.Text>
                   <strong>Họ tên:</strong> {`${formData.lastName} ${formData.fullName}`}<br />
                   <strong>CCCD:</strong> {formData.cccd}<br />
-                  <strong>Điểm đi:</strong> {flight.departure}<br />
-                  <strong>Điểm đến:</strong> {flight.destination}<br />
-                  <strong>Ngày đi:</strong> {flight.departureDate}<br />
-                  <strong>Ngày về:</strong> {flight.returnDate}<br />
-                  <strong>Giá:</strong> {flight.price.toLocaleString()} VND<br />
+                  <strong>Mã chuyến bay:</strong> {flight.MaChuyenBay}<br />
+                  <strong>Điểm đi:</strong> {flight.DiemDi}<br />
+                  <strong>Điểm đến:</strong> {flight.DiemDen}<br />
+                  <strong>Ngày đi:</strong> {flight.Ngay}<br />
+                  <strong>Giá:</strong> {flight.Gia.toLocaleString()} VND<br />
                 </Card.Text>
               </Card.Body>
             </Card>

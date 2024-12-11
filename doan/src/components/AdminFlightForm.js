@@ -22,25 +22,26 @@ const AdminFlightForm = () => {
 
   const fetchTickets = async () => {
     try {
-      const response = await fetch("http://localhost:5000/tickets");
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      const mappedData = data.map((ticket) => ({
-        _id: ticket._id,
-        flightNumber: ticket.MaChuyenBay,
-        ticketNumber: ticket.MaVe,
-        passengerName: ticket.TenHanhKhach,
-        passportNumber: ticket.CMND_Passport,
-        price: ticket.Gia,
-        sdt: ticket.SDT,
-      }));
-      setTicketList(mappedData);
+        const response = await fetch("http://localhost:5000/tickets");
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        const mappedData = data.map((ticket) => ({
+            _id: ticket._id,
+            flightNumber: ticket.MaChuyenBay,
+            ticketNumber: ticket.MaVe,
+            passengerName: ticket.TenHanhKhach,
+            passportNumber: ticket.CMND_Passport,
+            price: ticket.Gia,
+            sdt: ticket.SDT,
+            selectedSeats: ticket.selectedSeats // Lưu số ghế đã chọn
+        }));
+        setTicketList(mappedData);
     } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
+        console.error("Lỗi khi lấy dữ liệu:", error);
     }
-  };
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -254,41 +255,45 @@ const AdminFlightForm = () => {
           )}
           <h3>Danh sách vé</h3>
           <table className="table">
-            <thead>
+          <thead>
               <tr>
-                <th>Mã Vé</th>
-                <th>Tên Hành Khách</th>
-                <th>Số Hộ Chiếu</th>
-                <th>Số Điện Thoại</th>
-                <th>Giá</th>
-                <th>Hành Động</th>
+                  <th>Mã Vé</th>
+                  <th>Mã Chuyến Bay</th>
+                  <th>Tên Hành Khách</th>
+                  <th>Số Hộ Chiếu</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Giá</th>
+                  <th>Số ghế</th> {/* Cột số ghế */}
+                  <th>Hành Động</th>
               </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
               {ticketList.map((ticket) => (
-                <tr key={ticket._id}>
-                  <td>{ticket.ticketNumber}</td>
-                  <td>{ticket.passengerName}</td>
-                  <td>{ticket.passportNumber}</td>
-                  <td>{ticket.sdt}</td>
-                  <td>{ticket.price}</td>
-                  <td>
-                    <button
-                      className="btn btn-warning btn-sm"
-                      onClick={() => handleEditTicket(ticket)}
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm ml-2"
-                      onClick={() => handleDeleteTicket(ticket._id)}
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
+                  <tr key={ticket._id}>
+                      <td>{ticket.ticketNumber}</td>
+                      <td>{ticket.flightNumber}</td>
+                      <td>{ticket.passengerName}</td>
+                      <td>{ticket.passportNumber}</td>
+                      <td>{ticket.sdt}</td>
+                      <td>{ticket.price}</td>
+                      <td>{ticket.selectedSeats}</td> {/* Hiển thị số ghế */}
+                      <td>
+                          <button
+                              className="btn btn-warning btn-sm"
+                              onClick={() => handleEditTicket(ticket)}
+                          >
+                              Sửa
+                          </button>
+                          <button
+                              className="btn btn-danger btn-sm ml-2"
+                              onClick={() => handleDeleteTicket(ticket._id)}
+                          >
+                              Xóa
+                          </button>
+                      </td>
+                  </tr>
               ))}
-            </tbody>
+          </tbody>
           </table>
         </div>
       </div>

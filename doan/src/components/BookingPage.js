@@ -11,8 +11,8 @@ const BookingPage = () => {
 
   const handleConfirmBooking = () => {
     // Chuyển hướng đến trang nhập thông tin khách hàng
-    navigate('/customer-info', { state: { flight } });
-  };
+    navigate('/customer-info', { state: { flight } }); // Đảm bảo flight không phải là undefined
+};
 
   return (
     <div>
@@ -23,12 +23,12 @@ const BookingPage = () => {
         <Card.Body>
           <Card.Title>Thông tin chuyến bay</Card.Title>
           <Card.Text>
-            <strong>Điểm đi:</strong> {flight.departure}<br />
-            <strong>Điểm đến:</strong> {flight.destination}<br />
-            <strong>Ngày đi:</strong> {flight.departureDate}<br />
-            <strong>Ngày về:</strong> {flight.returnDate}<br />
-            <strong>Loại ghế:</strong> {flight.seatClass}<br />
-            <strong>Giá:</strong> {flight.price.toLocaleString()} VND
+            <strong>Mã chuyến bay:</strong> {flight.MaChuyenBay}<br />
+            <strong>Điểm đi:</strong> {flight.DiemDi}<br />
+            <strong>Điểm đến:</strong> {flight.DiemDen}<br />
+            <strong>Ngày đi:</strong> {flight.Ngay}<br />
+            <strong>Loại ghế:</strong> {flight.LoaiGhe}<br />
+            <strong>Giá:</strong> {flight.Gia.toLocaleString()} VND
           </Card.Text>
         </Card.Body>
       </Card>
