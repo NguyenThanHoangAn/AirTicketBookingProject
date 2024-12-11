@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     CMND_Passport: { type: String, required: true }, // Sử dụng String cho CMND/Passport
     Gia: { type: Number, required: true },
     SDT: { type: String, required: true },
-    selectedSeats: {type: [String], require: true}
+    selectedSeats: {type: String, require: true}
 }, { collection: 'Tickets' }); 
 
 const Ticket = mongoose.model("Ticket ", userSchema); 

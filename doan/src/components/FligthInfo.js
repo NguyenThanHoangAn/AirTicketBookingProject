@@ -26,9 +26,9 @@ const FlightInfo = () => {
     };
 
     return (
-        <div className="d-flex flex-column min-vh-100"> {/* Thêm class để sử dụng flexbox */}
-            <Header /> {/* Thêm Header */}
-            <div className="container mt-5 flex-grow-1"> {/* Thêm class flex-grow-1 để nội dung chiếm không gian còn lại */}
+        <div>
+            <Header />
+            <div className="container mt-5">
                 <h1>Tìm thông tin chuyến bay</h1>
                 <Form onSubmit={handleSearch}>
                     <Form.Group controlId="ticketCode">
@@ -58,12 +58,13 @@ const FlightInfo = () => {
                                 <strong>Mã chuyến bay:</strong> {flightInfo.MaChuyenBay}<br />
                                 <strong>Giá:</strong> {flightInfo.Gia} VND<br />
                                 <strong>Số điện thoại:</strong> {flightInfo.SDT}<br />
+                                <strong>Số ghế:</strong> {flightInfo.selectedSeats}<br />
                             </Card.Text>
                         </Card.Body>
                     </Card>
                 )}
             </div>
-            <Footer /> {/* Thêm Footer */}
+            <Footer />
         </div>
     );
 };

@@ -12,7 +12,7 @@ const Payment = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { customerInfo, tickets } = location.state || {}; // Nhận thông tin khách hàng từ state
-
+   
     // Kiểm tra xem tickets có tồn tại không
     if (!tickets) {
         return <div>Không tìm thấy thông tin vé.</div>; // Thông báo nếu không có thông tin vé
@@ -32,15 +32,19 @@ const Payment = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const ticketCode = generateTicketCode(); // Tạo mã vé
-
+    
         // Thêm mã vé vào thông tin khách hàng
         const customerInfoWithTicketCode = {
             ...customerInfo,
             ticketCode, // Thêm mã vé vào thông tin
         };
-
+    
         // Gửi yêu cầu POST đến server để lưu vé
         try {
+            const selectedSeatsArray = Array.isArray(tickets.selectedSeats) 
+                ? tickets.selectedSeats 
+                : tickets.selectedSeats.split('|'); // Chuyển đổi chuỗi thành mảng nếu cần
+    
             const response = await fetch('http://localhost:5000/tickets', {
                 method: 'POST',
                 headers: {
@@ -54,14 +58,15 @@ const Payment = () => {
                     Gia: flight.Gia,
                     SDT: customerInfo.phoneNumber,
                     email: customerInfo.email,
-                    selectedSeats: tickets.selectedSeats // Thêm số ghế đã chọn
+                    selectedSeats: selectedSeatsArray.join('|') // Chuyển đổi mảng thành chuỗi
                 }),
             });
-
+    
             if (!response.ok) {
-                throw new Error('Lỗi khi lưu vé');
+                const errorMessage = await response.text();
+                throw new Error(`Lỗi khi lưu vé: ${errorMessage}`);
             }
-
+    
             // Chuyển hướng đến trang xác nhận
             navigate('/confirmation', { state: { tickets: { selectedSeats: [] }, customerInfo: customerInfoWithTicketCode } });
         } catch (error) {
@@ -69,7 +74,7 @@ const Payment = () => {
             alert('Đã xảy ra lỗi khi xác nhận thanh toán. Vui lòng thử lại.');
         }
     };
-    
+
     return (
         <div>
             <Header/>

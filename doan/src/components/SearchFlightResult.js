@@ -42,7 +42,6 @@ const SearchFlightResult = () => {
         <div>
             <Header />
             <div className="container mt-5">
-                <h3>Kết quả tìm kiếm chuyến bay</h3>
                 
                 {/* Phần tìm kiếm chuyến bay */}
                 <Card className="mb-4">

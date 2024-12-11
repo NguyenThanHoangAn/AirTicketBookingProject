@@ -59,9 +59,9 @@ const SeatSelection = () => {
     };
 
     const handleConfirmSeats = () => {
-        const updatedTickets = { selectedSeats: selectedSeats.join('|') }; // Sử dụng biến mới
-        navigate('/payment', { state: { selectedSeats, customerInfo, flight, tickets: updatedTickets } });
-    };
+    const updatedTickets = { selectedSeats: selectedSeats.join('|') }; // Sử dụng biến mới
+    navigate('/payment', { state: { selectedSeats, customerInfo, flight, tickets: updatedTickets } });
+};
 
     return (
         <div>
@@ -92,7 +92,8 @@ const SeatSelection = () => {
                             <Card.Body>
                                 <Card.Title>Thông tin chuyến bay</Card.Title>
                                 <Card.Text>
-                                    <strong>Họ tên:</strong> {`${customerInfo.lastName} ${customerInfo.fullName}`}<br />
+                                    <strong>Họ tên:</strong> {`${customerInfo.fullName}`}<br />
+                                    <strong>CCCD:</strong> {customerInfo.cccd}<br/>
                                     <strong>Mã chuyến bay:</strong> {flight.MaChuyenBay}<br />
                                     <strong>Điểm đi:</strong> {flight.DiemDi}<br />
                                     <strong>Điểm đến:</strong> {flight.DiemDen}<br />

@@ -198,6 +198,22 @@ app.delete('/flightmgs/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+// API để lấy danh sách vé theo mã vé
+app.get('/tickets/:ticketCode', async (req, res) => {
+    try {
+        const ticketCode = req.params.ticketCode;
+        const ticket = await Ticket.findOne({ MaVe: ticketCode }); // Tìm vé theo mã vé
+
+        if (!ticket) {
+            return res.status(404).json({ message: 'Không tìm thấy vé với mã này.' });
+        }
+
+        res.json(ticket);
+    } catch (error) {
+        console.error('Lỗi khi lấy dữ liệu:', error);
+        res.status(500).json({ message: error.message });
+    }
+});
 
 // API để lấy danh sách vé theo mã chuyến bay
 app.get('/tickets/:MaChuyenBay', async (req, res) => {
